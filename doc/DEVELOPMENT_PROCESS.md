@@ -164,18 +164,25 @@ Keep backend suites in `backend/tests/`, iOS suites in their respective iOS test
 
 ## Repository settings and enforcement
 
-Written policy does not enforce GitHub settings. On November 12, 2026, the connected account reported push access with `admin: false` and `maintain: false`. GitHub's `main` branch response reported `protected: false`, status-check enforcement off, and no required check contexts. The rulesets endpoint returned an empty list. The detailed branch-protection and collaborator-permission endpoints returned HTTP 403 (“Resource not accessible by integration”). Squash/merge/rebase and automatic branch-deletion settings were not exposed by the available repository metadata, so their values remain unverified. No settings were changed.
+The [team repository](https://github.com/balance-budgeting-team/balance-budgeting) uses a classic protection rule for the exact branch `main`. The following saved settings were verified through GitHub's API:
 
-A repository owner or administrator must apply and verify these settings:
+| Setting | Enforced value |
+| --- | --- |
+| Pull requests | Required, with one approval from someone other than the author. |
+| Updated changes | Stale approvals are dismissed when new commits are pushed. |
+| Required check | `Scaffold checks`, restricted to GitHub Actions (app ID `15368`). |
+| Branch freshness | The working branch must be up to date with `main` before merging. |
+| Conversations | All review conversations must be resolved. |
+| Administrators | Protection applies to administrators; no PR bypass allowances are configured. |
+| Direct and force pushes | Direct pushes cannot bypass the PR/review/check requirements; force pushes are disabled. |
+| Branch deletion | Deletion of `main` is disabled. |
+| History | Linear history is required. |
+| Merge methods | Squash merging is enabled; merge commits and rebase merging are disabled. |
+| Merged branches | Automatic deletion of merged working branches is enabled. |
 
-1. Open **Settings → General → Pull Requests**. Enable **Allow squash merging**; disable **Allow merge commits** and **Allow rebase merging**. Enable **Automatically delete head branches**.
-2. Open **Settings → Branches → Add classic branch protection rule** and enter the exact branch pattern `main`.
-3. Enable **Require a pull request before merging**, then **Require approvals**, with **1** required approval. GitHub excludes the author's own approval. Enable **Dismiss stale pull request approvals when new commits are pushed** so the approved diff stays current.
-4. Enable **Require status checks to pass before merging** and **Require branches to be up to date before merging**. Once this PR has produced a run, select the exact **Scaffold checks** context from GitHub Actions. Add backend/iOS contexts when those real workflows are introduced.
-5. Enable **Require conversation resolution before merging** and **Do not allow bypassing the above settings**. Keep **Allow force pushes** and **Allow deletions** disabled. Do not add bypass exceptions. These settings require reviewed PRs for `main`, including administrator changes.
-6. Save the rule, reopen it to verify the saved values, and inspect the PR merge box for the approval and check requirements. Verify that `main` is now reported protected and the required context is listed. Recheck merge-method and branch-deletion settings separately.
+Administrators maintain the rule under **Settings → Branches** and merge/deletion options under **Settings → General → Pull Requests**. Keep the exact required check context synchronized with workflow names. Add backend and iOS contexts when those real workflows are introduced. After changing settings, read them back and inspect the PR merge requirements before claiming enforcement.
 
-All enforcement settings above remain outstanding until an administrator applies and verifies them. Review within 48 hours, descriptive messages, review quality, and evidence requirements remain team responsibilities. Automatic branch deletion occurs after merge; it must not delete `main`. This task leaves its PR open for an independent reviewer and does not merge or approve it.
+Review within 48 hours, descriptive messages, review quality, and evidence requirements remain team responsibilities. Automatic branch deletion occurs after merge and does not override protection of `main`. Each PR still needs an independent review; an author's own approval cannot satisfy the requirement.
 
 ## References
 

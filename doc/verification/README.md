@@ -6,5 +6,4 @@ At milestones M0–M5, retain selected sanitized reports under a milestone subfo
 
 The V&V plan places detailed recordings, screenshots, XCTest results, and validation records in the team SharePoint evidence store. Use participant codes, follow its access/retention rules, and link authorized supporting evidence rather than committing sensitive records. Fixture versions and test results belong in the RVTM when available.
 
-- [Repository setup session, November 12, 2026](session-2026-11-12.md)
 - [Development process and current checks](../DEVELOPMENT_PROCESS.md)

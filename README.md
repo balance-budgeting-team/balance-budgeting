@@ -6,9 +6,9 @@ Contributors: Aishwarya Aswin, Jackson Graff, Srikar Mallajosyula, Hitaesh Sarav
 
 ## Project navigation
 
-- [Development process](doc/DEVELOPMENT_PROCESS.md): repository architecture, branches, reviews, CI, merge policy, and outstanding owner settings.
+- [Development process](doc/DEVELOPMENT_PROCESS.md): repository architecture, branches, reviews, CI, merge policy, and repository protection settings.
 - [Software Development Plan](Balance_Software_Development_Plan.docx): project scope and requirements; retained at its original path.
-- [Verification evidence](doc/verification/README.md): archive conventions and the setup session record.
+- [Verification evidence](doc/verification/README.md): milestone report and evidence archive conventions.
 - [iOS application area](ios/README.md): reserved source and XCTest locations.
 - [Backend area](backend/README.md): reserved FastAPI source and test locations.
 - [Shared fixtures](tests/fixtures/README.md) and [cross-component scenarios](tests/e2e/README.md).
@@ -39,4 +39,4 @@ GitHub Actions runs **Scaffold checks** on PRs to `main` and pushes to `main`. B
 
 Start from the latest `main` in this team repository. Use `feature/<issue#>-short-name`, `fix/<issue#>-short-name`, or `docs/<topic>`. All changes to `main` require a PR, one non-author approval, green CI, and resolved conversations. Complete requested reviews within 48 hours. Squash merge and delete the merged branch.
 
-As inspected on November 12, 2026, `main` was unprotected and the connected account lacked admin access. The [owner setup steps](doc/DEVELOPMENT_PROCESS.md#repository-settings-and-enforcement) remain outstanding; the written policy is not yet technically enforced.
+The team repository is [balance-budgeting-team/balance-budgeting](https://github.com/balance-budgeting-team/balance-budgeting). Its [main protections](doc/DEVELOPMENT_PROCESS.md#repository-settings-and-enforcement) enforce the review and CI requirements for all contributors, including administrators. Only squash merging is enabled, and merged branches are deleted automatically.
