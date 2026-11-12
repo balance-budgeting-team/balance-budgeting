@@ -1,0 +1,8 @@
+{
+  "globs": ["**/*.md", ".github/**/*.md"],
+  "ignores": ["node_modules/**", ".tools/**"],
+  "config": {
+    "default": true,
+    "MD013": false
+  }
+}

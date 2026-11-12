@@ -1,0 +1,53 @@
+# Local tools and editor/OS state
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+.tools/
+node_modules/
+npm-debug.log*
+
+# Credentials and local configuration; examples must contain dummy values only
+.env
+.env.*
+!.env.example
+!.env.*.example
+.aws/
+*.pem
+*.key
+*.p12
+*.p8
+
+# Python environments, caches, builds, and generated test reports
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+junit*.xml
+*.egg-info/
+dist/
+
+# Xcode and Swift generated state; shared project configuration stays tracked
+DerivedData/
+.build/
+xcuserdata/
+*.xcuserstate
+*.xcresult/
+
+# Local databases and logs
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Selected sanitized milestone reports are intentionally retained
+!doc/verification/**/coverage.xml
+!doc/verification/**/junit*.xml
