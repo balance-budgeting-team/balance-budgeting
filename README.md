@@ -16,7 +16,7 @@ Contributors: Aishwarya Aswin, Jackson Graff, Srikar Mallajosyula, Hitaesh Sarav
 
 ## Current status
 
-This repository contains planning documents and a development scaffold. Backend and iOS code, an Xcode project, Docker Compose, and application test suites have not been implemented. There is no runnable application setup yet. The SDP's reference to an existing 40-test suite is not supported by this checkout; the V&V plan's backend commands are future setup instructions.
+This repository contains planning documents, a development scaffold, and the first backend service: FR-07 budget threshold alert logic with unit tests (see the [backend area](backend/README.md)). There are no API routes, database, provider integrations, iOS code, Xcode project, or Docker Compose setup yet, so there is no runnable application. The SDP's reference to an existing 40-test suite is not supported by this checkout; the V&V plan's Docker and PostgreSQL commands are future setup instructions.
 
 Use `doc/verification/` for verification reports. The `docs/verification/` reference in Section 5 of the supplied V&V plan needs correction in its next revision.
 
@@ -33,7 +33,9 @@ git diff --check
 
 Installation needs internet access. The checks lint Markdown, validate local documentation links and the tracked repository tree, and validate GitHub Actions with actionlint 1.7.11. Stage new documentation files before the tree/link check; see the [exact checks and limitations](doc/DEVELOPMENT_PROCESS.md#checks-available-now). No provider credentials are needed.
 
-GitHub Actions runs **Scaffold checks** on PRs to `main` and pushes to `main`. Backend/PostgreSQL and Xcode acceptance gates must be added with their first implementation. A green scaffold check does not verify application behavior.
+Backend lint and unit tests use Python 3.12; see the [backend area](backend/README.md) for commands.
+
+GitHub Actions runs **Scaffold checks** and **Backend unit tests** on PRs to `main` and pushes to `main`. PostgreSQL acceptance and Xcode gates must be added with the database and iOS implementations. A green scaffold check does not verify application behavior.
 
 ## Contributing
 

@@ -30,9 +30,10 @@ balance-budgeting/
 │   │   ├── schemas/
 │   │   ├── services/
 │   │   └── adapters/
-│   └── tests/
-│       ├── unit/
-│       └── integration/
+│   ├── tests/
+│   │   ├── unit/
+│   │   └── integration/
+│   └── pyproject.toml
 ├── tests/
 │   ├── fixtures/
 │   └── e2e/
@@ -64,13 +65,14 @@ The tree shows the main organization. Reserved folders contain short READMEs so 
 | `backend/app/adapters/` | Replaceable interfaces to external providers. |
 | `backend/tests/unit/` | Isolated service and calculation tests using synthetic fixtures and provider fakes. |
 | `backend/tests/integration/` | API, PostgreSQL, ownership, and provider-interface tests using simulated provider responses. |
+| `backend/pyproject.toml` | Backend project metadata, exactly pinned development tools (pytest, ruff), and their configuration. |
 | `tests/fixtures/` | Shared, versioned synthetic datasets and independently determined expected results. |
 | `tests/e2e/` | Cross-component scenarios and supporting automation. |
 | `.github/` | Actions workflows, check scripts, and the pull request template. |
 
 This structure supports the [SDP](../Balance_Software_Development_Plan.docx) and the supplied Verification and Validation Plan. `doc/verification/` is the canonical archive location. Section 5, “Results archive location,” of the November 7, 2026 V&V plan uses `docs/verification/<milestone>/`; that reference needs correction to `doc/verification/<milestone>/` in the next planning-document revision. This scaffold does not modify the planning documents or relocate the SDP.
 
-The current checkout contains no backend implementation, Xcode project, application tests, Docker Compose setup, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
+The current checkout contains one backend service, FR-07 budget threshold alert logic, with its unit tests and a provider-agnostic SMS interface. It contains no API routes, database, Xcode project, iOS tests, Docker Compose setup, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
 
 ## Branching and workflow
 
@@ -139,6 +141,16 @@ The individual commands are:
 | `git diff --check` | Checks unstaged diff whitespace. Also run `git diff --cached --check` after staging changes. |
 
 Stage newly added documentation and structural files with an explicit `git add <paths>` before running `check:docs`, because it reads the Git index. It validates current file contents against that tracked-file list; CI checks a clean checkout. Markdown linting also includes untracked Markdown outside ignored tool directories. External URLs are not fetched by the local link checker, and raw HTML links or custom HTML anchors are outside its scope; use Markdown links and headings for repository documentation. Link checks validate paths, not the contents of binary documents.
+
+The [Backend checks workflow](../.github/workflows/backend.yml) also runs on every PR targeting `main` and every push to `main`, without path filters. Its check name is **Backend unit tests**. It installs the backend with the pinned development tools on the Python version in `backend/.python-version`, then runs these commands from `backend/`:
+
+| Command | Evidence |
+| --- | --- |
+| `ruff check .` | Python lint: pyflakes, pycodestyle, import order, bugbear, and pyupgrade rules. |
+| `ruff format --check .` | Python formatting. |
+| `pytest` | Backend unit tests, currently the FR-07 budget threshold alert service. |
+
+See the [backend area](../backend/README.md) for local setup. **Backend unit tests** is not yet a required check; an administrator must add it under **Settings → Branches**, as described in [repository settings](#repository-settings-and-enforcement). It does not yet cover PostgreSQL acceptance, the outbound-network restriction, or adapter coverage, because no database or provider implementation exists.
 
 Empty suites, echo-only jobs, fabricated reports, and `continue-on-error` do not count as successful verification. A passing scaffold check provides no evidence for financial correctness, provider integration, PostgreSQL acceptance, or iOS behavior.
 
