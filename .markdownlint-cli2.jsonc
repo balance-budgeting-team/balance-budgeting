@@ -1,6 +1,6 @@
 {
   "globs": ["**/*.md", ".github/**/*.md"],
-  "ignores": ["node_modules/**", ".tools/**"],
+  "ignores": ["node_modules/**", ".tools/**", "**/.venv/**"],
   "config": {
     "default": true,
     "MD013": false
