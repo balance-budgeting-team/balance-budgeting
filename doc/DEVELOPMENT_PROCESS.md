@@ -148,7 +148,7 @@ The [Backend checks workflow](../.github/workflows/backend.yml) also runs on eve
 | `ruff format --check .` | Python formatting. |
 | `pytest` | Backend unit tests and API integration tests against PostgreSQL. `TEST_DATABASE_URL` is always set in CI, so integration tests cannot be skipped there. |
 
-See the [backend area](../backend/README.md) for local setup. An administrator must add **Backend tests (PostgreSQL)** as a required check, as described in [repository settings](#repository-settings-and-enforcement). It does not yet cover the outbound-network restriction or adapter coverage, because no provider implementation exists.
+See the [backend area](../backend/README.md) for local setup. **Backend tests (PostgreSQL)** is a required check on `main`, as described in [repository settings](#repository-settings-and-enforcement). It does not yet cover the outbound-network restriction or adapter coverage, because no provider implementation exists.
 
 Empty suites, echo-only jobs, fabricated reports, and `continue-on-error` do not count as successful verification. A passing scaffold check provides no evidence for financial correctness, provider integration, PostgreSQL acceptance, or iOS behavior.
 
@@ -180,7 +180,7 @@ The [team repository](https://github.com/balance-budgeting-team/balance-budgetin
 | --- | --- |
 | Pull requests | Required, with one approval from someone other than the author. |
 | Updated changes | Stale approvals are dismissed when new commits are pushed. |
-| Required check | `Scaffold checks`, restricted to GitHub Actions (app ID `15368`). |
+| Required checks | `Scaffold checks` and `Backend tests (PostgreSQL)`, each restricted to GitHub Actions (app ID `15368`). |
 | Branch freshness | The working branch must be up to date with `main` before merging. |
 | Conversations | All review conversations must be resolved. |
 | Administrators | Protection applies to administrators; no PR bypass allowances are configured. |
@@ -190,7 +190,7 @@ The [team repository](https://github.com/balance-budgeting-team/balance-budgetin
 | Merge methods | Squash merging is enabled; merge commits and rebase merging are disabled. |
 | Merged branches | Automatic deletion of merged working branches is enabled. |
 
-Administrators maintain the rule under **Settings → Branches** and merge/deletion options under **Settings → General → Pull Requests**. Keep the exact required check context synchronized with workflow names. Add backend and iOS contexts when those real workflows are introduced. After changing settings, read them back and inspect the PR merge requirements before claiming enforcement.
+Administrators maintain the rule under **Settings → Branches** and merge/deletion options under **Settings → General → Pull Requests**. Keep the exact required check context synchronized with workflow names. Add the mobile client context when that real workflow is introduced. After changing settings, read them back and inspect the PR merge requirements before claiming enforcement.
 
 Review within 48 hours, descriptive messages, review quality, and evidence requirements remain team responsibilities. Automatic branch deletion occurs after merge and does not override protection of `main`. Each PR still needs an independent review; an author's own approval cannot satisfy the requirement.
 
