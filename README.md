@@ -16,7 +16,7 @@ Contributors: Aishwarya Aswin, Jackson Graff, Srikar Mallajosyula, Hitaesh Sarav
 
 ## Current status
 
-This repository contains planning documents and a development scaffold. Backend and iOS code, an Xcode project, Docker Compose, and application test suites have not been implemented. There is no runnable application setup yet. The SDP's reference to an existing 40-test suite is not supported by this checkout; the V&V plan's backend commands are future setup instructions.
+This repository contains planning documents and a development scaffold. The only implemented application code is the backend's FR-13 streak and achievement engine and its unit tests (see [backend/README.md](backend/README.md)). The FastAPI application, database, provider integrations, iOS code, Xcode project, and Docker Compose have not been implemented. There is no runnable application setup yet. The SDP's reference to an existing 40-test suite is not supported by this checkout; the V&V plan's backend commands are future setup instructions.
 
 Use `doc/verification/` for verification reports. The `docs/verification/` reference in Section 5 of the supplied V&V plan needs correction in its next revision.
 
