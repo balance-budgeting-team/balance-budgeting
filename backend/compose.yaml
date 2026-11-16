@@ -1,0 +1,24 @@
+# Local development database for the Balance backend.
+# Start it from backend/ with:  docker compose up -d
+# The user/password below are local-only development values, not real credentials.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: balance
+      POSTGRES_PASSWORD: balance
+      POSTGRES_DB: balance
+    ports:
+      - "5432:5432"
+    volumes:
+      - balance-pgdata:/var/lib/postgresql/data
+      # Also creates the disposable balance_test database used by integration tests.
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U balance -d balance"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  balance-pgdata:

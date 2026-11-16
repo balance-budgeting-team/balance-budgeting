@@ -70,7 +70,7 @@ The tree shows the main organization. Reserved folders contain short READMEs so 
 
 This structure supports the [SDP](../Balance_Software_Development_Plan.docx) and the supplied Verification and Validation Plan. `doc/verification/` is the canonical archive location. Section 5, “Results archive location,” of the November 7, 2026 V&V plan uses `docs/verification/<milestone>/`; that reference needs correction to `doc/verification/<milestone>/` in the next planning-document revision. This scaffold does not modify the planning documents or relocate the SDP.
 
-The current checkout contains no backend implementation, Xcode project, application tests, Docker Compose setup, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
+The backend contains the Flow 1 budget API (FastAPI, PostgreSQL via `backend/compose.yaml`, synthetic seed data, and unit and PostgreSQL integration tests); see the [backend area](../backend/README.md). The repository does not yet contain an iOS or other client application, sign-in, database migrations, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
 
 ## Branching and workflow
 
@@ -140,6 +140,16 @@ The individual commands are:
 
 Stage newly added documentation and structural files with an explicit `git add <paths>` before running `check:docs`, because it reads the Git index. It validates current file contents against that tracked-file list; CI checks a clean checkout. Markdown linting also includes untracked Markdown outside ignored tool directories. External URLs are not fetched by the local link checker, and raw HTML links or custom HTML anchors are outside its scope; use Markdown links and headings for repository documentation. Link checks validate paths, not the contents of binary documents.
 
+The [Backend checks workflow](../.github/workflows/backend.yml) also runs on every PR targeting `main` and every push to `main`, without path filters. Its check name is **Backend tests (PostgreSQL)**. It starts a PostgreSQL 16 service, installs the backend with its pinned dependencies on the Python version in `backend/.python-version`, and runs these commands from `backend/`:
+
+| Command | Evidence |
+| --- | --- |
+| `ruff check .` | Python lint: pyflakes, pycodestyle, import order, bugbear, and pyupgrade rules. |
+| `ruff format --check .` | Python formatting. |
+| `pytest` | Backend unit tests and API integration tests against PostgreSQL. `TEST_DATABASE_URL` is always set in CI, so integration tests cannot be skipped there. |
+
+See the [backend area](../backend/README.md) for local setup. **Backend tests (PostgreSQL)** is a required check on `main`, as described in [repository settings](#repository-settings-and-enforcement). It does not yet cover the outbound-network restriction or adapter coverage, because no provider implementation exists.
+
 Empty suites, echo-only jobs, fabricated reports, and `continue-on-error` do not count as successful verification. A passing scaffold check provides no evidence for financial correctness, provider integration, PostgreSQL acceptance, or iOS behavior.
 
 ## Application gates to add with implementation
@@ -156,7 +166,7 @@ Backend gates must include:
 - At least 80% line coverage for each implemented adapter and the complete backend suite finishing in under 10 minutes.
 - All tests passing, including financial-calculation fixtures, ownership/security tests, and relevant regression cases.
 
-The V&V plan proposes Python 3.12, pytest, pytest-cov, FastAPI TestClient, freezegun, and Docker PostgreSQL. Pin and validate the real backend dependencies when implementing that component. Its proposed `docker compose` commands require a Compose file, an API service, a test database, and test configuration that do not exist yet. Staging sandbox/live-provider system tests are separate from isolated CI acceptance and are not part of this scaffold task.
+The V&V plan proposes Python 3.12, pytest, pytest-cov, FastAPI TestClient, freezegun, and Docker PostgreSQL. Pin and validate the real backend dependencies when implementing that component. `backend/compose.yaml` now provides the PostgreSQL development and test databases; the API runs with `uvicorn` as described in the [backend area](../backend/README.md). Staging sandbox/live-provider system tests are separate from isolated CI acceptance and are not part of this scaffold task.
 
 iOS gates must include a successful Xcode build and relevant XCTest, UI, and performance checks. Specify the real project/workspace, shared scheme, simulator destination, and Xcode version when introducing those checks. User-facing changes also receive manual workflow walkthroughs and accessibility checks when affected, including VoiceOver and Dynamic Type requirements from NFR-04.
 
@@ -170,7 +180,7 @@ The [team repository](https://github.com/balance-budgeting-team/balance-budgetin
 | --- | --- |
 | Pull requests | Required, with one approval from someone other than the author. |
 | Updated changes | Stale approvals are dismissed when new commits are pushed. |
-| Required check | `Scaffold checks`, restricted to GitHub Actions (app ID `15368`). |
+| Required checks | `Scaffold checks` and `Backend tests (PostgreSQL)`, each restricted to GitHub Actions (app ID `15368`). |
 | Branch freshness | The working branch must be up to date with `main` before merging. |
 | Conversations | All review conversations must be resolved. |
 | Administrators | Protection applies to administrators; no PR bypass allowances are configured. |
@@ -180,7 +190,7 @@ The [team repository](https://github.com/balance-budgeting-team/balance-budgetin
 | Merge methods | Squash merging is enabled; merge commits and rebase merging are disabled. |
 | Merged branches | Automatic deletion of merged working branches is enabled. |
 
-Administrators maintain the rule under **Settings → Branches** and merge/deletion options under **Settings → General → Pull Requests**. Keep the exact required check context synchronized with workflow names. Add backend and iOS contexts when those real workflows are introduced. After changing settings, read them back and inspect the PR merge requirements before claiming enforcement.
+Administrators maintain the rule under **Settings → Branches** and merge/deletion options under **Settings → General → Pull Requests**. Keep the exact required check context synchronized with workflow names. Add the mobile client context when that real workflow is introduced. After changing settings, read them back and inspect the PR merge requirements before claiming enforcement.
 
 Review within 48 hours, descriptive messages, review quality, and evidence requirements remain team responsibilities. Automatic branch deletion occurs after merge and does not override protection of `main`. Each PR still needs an independent review; an author's own approval cannot satisfy the requirement.
 
