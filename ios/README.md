@@ -6,7 +6,7 @@ The Balance iPhone app, written in Swift with SwiftUI.
 
 You need a Mac with Xcode 16 or later and Docker Desktop.
 
-1. **Start the backend** (in Terminal, from the repo root). The first two commands are only needed once.
+1. **Start the backend** (in Terminal, from the repo root). The `venv` and `pip` lines are only needed the first time.
 
    ```sh
    cd backend
@@ -21,7 +21,9 @@ You need a Mac with Xcode 16 or later and Docker Desktop.
 
 2. **Run the app.** Open `ios/Balance.xcodeproj` in Xcode, pick any iPhone Simulator at the top, and press **Run** (⌘R).
 
-3. **Run the tests.** Press **⌘U** in Xcode. The tests don't need the backend.
+3. **Try Flow 1.** Tap the weekly spending card, enter `0` to see the error, enter `400`, tap **Review changes**, then **Save budget**. Home shows the saved notice and $152 of $400.
+
+4. **Run the tests.** Press **⌘U** in Xcode. The tests don't need the backend.
 
 The app calls the backend at `http://127.0.0.1:8000`, which only works in the Simulator on the same Mac.
 
@@ -30,8 +32,8 @@ The app calls the backend at `http://127.0.0.1:8000`, which only works in the Si
 | Folder | What's in it |
 | --- | --- |
 | `Balance/App/` | `BalanceApp.swift`, where the app starts. |
-| `Balance/Core/` | `Budget.swift` (the data the backend sends) and `BudgetAPI.swift` (the calls to the backend). |
-| `Balance/Features/Home/` | The Home screen. |
+| `Balance/Core/` | `Budget.swift` (the data the backend sends), `BudgetAPI.swift` (the calls to the backend), and `Theme.swift` (colors). |
+| `Balance/Features/Home/` | Flow 1: Home, editing, review, and the saved notice. See [Features](Balance/Features/README.md). |
 | `BalanceTests/` | Unit tests. |
 | `BalanceUITests/` | Reserved for interface tests in a later milestone. |
 
