@@ -156,7 +156,7 @@ Empty suites, echo-only jobs, fabricated reports, and `continue-on-error` do not
 
 ## Application gates to add with implementation
 
-Add backend checks with the first backend implementation, and iOS checks with the first iOS implementation. Introduce real dependency/build configuration and tests alongside the code; do not add empty targets merely to make CI green.
+Add backend checks with the first backend implementation. iOS checks are introduced in the two stages described below. Introduce real dependency/build configuration and tests alongside the code; do not add empty targets merely to make CI green.
 
 Backend gates must include:
 
@@ -170,7 +170,17 @@ Backend gates must include:
 
 The V&V plan proposes Python 3.12, pytest, pytest-cov, FastAPI TestClient, freezegun, and Docker PostgreSQL. Pin and validate the real backend dependencies when implementing that component. `backend/compose.yaml` now provides the PostgreSQL development and test databases; the API runs with `uvicorn` as described in the [backend area](../backend/README.md). Staging sandbox/live-provider system tests are separate from isolated CI acceptance and are not part of this scaffold task.
 
-iOS gates must include a successful Xcode build and relevant XCTest, UI, and performance checks. Specify the real project/workspace, shared scheme, simulator destination, and Xcode version when introducing those checks. User-facing changes also receive manual workflow walkthroughs and accessibility checks when affected, including VoiceOver and Dynamic Type requirements from NFR-04.
+iOS gates are introduced in two stages.
+
+**Prototype gate (Flow 1 prototype).** Every iOS PR must:
+
+- Build the shared `Balance` scheme for the iOS Simulator and pass the `BalanceTests` unit tests locally with `xcodebuild test`. The PR's Validation section lists the exact command, Xcode version, and Simulator destination, and its result.
+- Include unit tests for new view-model logic, validation, and API request/response handling. Network calls in tests use a stubbed session, never a live server.
+- Describe a manual Simulator walkthrough of the affected screens against the local backend, with a screenshot when the interface changes.
+
+During the prototype, the iOS gate runs locally and is not yet a required CI check. Reviewers confirm the local results listed in the PR before approving. This keeps the prototype focused on the Flow 1 screens while macOS runner and Simulator setup in CI is deferred.
+
+**Next-milestone gate.** Before further iOS feature work, add a GitHub Actions workflow that builds the app and runs XCTest on a macOS runner, and make it a required check on `main`. Add interface tests in `ios/BalanceUITests/`, performance checks, and the manual VoiceOver and Dynamic Type checks from NFR-04 for user-facing changes. The workflow specifies the real project, shared scheme, Simulator destination, and Xcode version.
 
 Keep backend suites in `backend/tests/`, iOS suites in their respective iOS test folders, and cross-component scenarios in `tests/e2e/`. Link requirements and RVTM test IDs in PRs and evidence. Automated reports should identify the suite, commit SHA, environment, and run, with milestone evidence retained under `doc/verification/`. Restrict participant records and sensitive evidence to the team-approved evidence store; commit only sanitized reports and authorized links.
 
