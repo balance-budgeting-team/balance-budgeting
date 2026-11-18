@@ -35,6 +35,8 @@ def message_for(error: dict[str, Any]) -> str:
             return AMOUNT_TOO_PRECISE
         # missing, null, blank, non-numeric, zero, or negative
         return AMOUNT_TOO_LOW
+    if field == "limit":
+        return "Limit must be a whole number between 1 and 50."
     if field == "period":
         return PERIOD_INVALID
     return BODY_INVALID

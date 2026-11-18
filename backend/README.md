@@ -6,6 +6,7 @@ Balance's Python FastAPI backend. It currently serves the budget API for the Flo
 | --- | --- |
 | `GET /budgets/current` | Load the budget and spending totals shown on Home. |
 | `PUT /budgets/{budget_id}` | Save a new budget period and amount (FR-03) and return the recalculated totals. |
+| `GET /transactions/recent` | Load recent transaction history for Home. |
 | `GET /health` | Report that the server is running. |
 
 ## Request and response format
@@ -33,6 +34,25 @@ Both budget routes return:
 - Money is a JSON number in US dollars with at most two decimal places.
 - An invalid request returns status 422 with one message the app can show, for example `{"detail": "Enter an amount greater than $0."}`.
 - An unknown budget returns status 404 with `{"detail": "Budget not found."}`.
+
+`GET /transactions/recent` returns the demo user's transactions, newest first, with ties ordered by descending ID. The optional `limit` query parameter defaults to 10 and must be an integer from 1 through 50. For example:
+
+```json
+{
+  "transactions": [
+    {
+      "id": 1,
+      "merchant": "Blue Bottle Coffee",
+      "category": "Dining",
+      "amount": 5.75,
+      "posted_at": "2026-11-18T10:30:00-05:00",
+      "excluded": false
+    }
+  ]
+}
+```
+
+Excluded transactions remain visible in history with `"excluded": true`, even though they do not count toward spending. An empty history returns `{"transactions": []}`. Invalid limits return status 422.
 
 With the server running, interactive documentation is at <http://localhost:8000/docs>.
 
