@@ -16,6 +16,7 @@ balance-budgeting/
 │   ├── DEVELOPMENT_PROCESS.md
 │   └── verification/
 ├── ios/
+│   ├── Balance.xcodeproj/
 │   ├── Balance/
 │   │   ├── App/
 │   │   ├── Features/
@@ -51,6 +52,7 @@ The tree shows the main organization. Reserved folders contain short READMEs so 
 | --- | --- |
 | `doc/` | Development process, architecture notes, and future project documentation. Existing planning documents remain at their current paths. |
 | `doc/verification/` | Selected milestone reports and links to verification evidence. |
+| `ios/Balance.xcodeproj/` | Xcode project and the shared `Balance` scheme. Source folders are synchronized, so new files need no project edits. |
 | `ios/Balance/App/` | Application entry point and app-level setup. |
 | `ios/Balance/Features/` | Screens, view models, and related code grouped by features such as onboarding, dashboard, and budgets. |
 | `ios/Balance/Core/` | Shared models, networking, and reusable interface components. |
@@ -70,7 +72,7 @@ The tree shows the main organization. Reserved folders contain short READMEs so 
 
 This structure supports the [SDP](../Balance_Software_Development_Plan.docx) and the supplied Verification and Validation Plan. `doc/verification/` is the canonical archive location. Section 5, “Results archive location,” of the November 7, 2026 V&V plan uses `docs/verification/<milestone>/`; that reference needs correction to `doc/verification/<milestone>/` in the next planning-document revision. This scaffold does not modify the planning documents or relocate the SDP.
 
-The backend contains the Flow 1 budget API (FastAPI, PostgreSQL via `backend/compose.yaml`, synthetic seed data, and unit and PostgreSQL integration tests); see the [backend area](../backend/README.md). The repository does not yet contain an iOS or other client application, sign-in, database migrations, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
+The backend contains the Flow 1 budget API (FastAPI, PostgreSQL via `backend/compose.yaml`, synthetic seed data, and unit and PostgreSQL integration tests); see the [backend area](../backend/README.md). The [iOS area](../ios/README.md) contains the SwiftUI app with the budget API client and the Flow 1 screens. The repository does not yet contain sign-in, database migrations, or provider integrations. The SDP's NFR-05 supporting-context reference to an existing 40-test suite is not supported by the repository inspected on November 12, 2026. The V&V plan's Docker and Xcode commands describe future application checks and cannot run against this scaffold. Its referenced RVTM workbook and GANTT workbook are also absent from this checkout; no results are inferred from those references.
 
 ## Branching and workflow
 

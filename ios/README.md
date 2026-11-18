@@ -1,11 +1,44 @@
-# iOS application
+# iOS app
 
-Reserved for Balance's native iOS application and test targets. No Xcode project, shared scheme, executable app, or tests exist yet.
+The Balance iPhone app, written in Swift with SwiftUI.
 
-- `Balance/App/`: entry point and app setup.
-- `Balance/Features/`: feature screens and view models.
-- `Balance/Core/`: shared models, networking, and reusable interface components.
-- `BalanceTests/`: unit tests.
-- `BalanceUITests/`: interface, accessibility, and performance tests.
+## Run it
 
-Add the real project, shared scheme, supported Xcode version, simulator destination, build command, and test command with the first implementation. Application changes require an Xcode build and relevant XCTest/UI checks. User-facing changes also need manual workflows and accessibility checks when affected. See the [development process](../doc/DEVELOPMENT_PROCESS.md#application-gates-to-add-with-implementation).
+You need a Mac with Xcode 16 or later and Docker Desktop.
+
+1. **Start the backend** (in Terminal, from the repo root). The `venv` and `pip` lines are only needed the first time.
+
+   ```sh
+   cd backend
+   python3.12 -m venv .venv
+   .venv/bin/python -m pip install -e '.[dev]'
+   docker compose up -d --wait
+   .venv/bin/python -m app.seed
+   .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+   ```
+
+   Leave this running. `app.seed` resets the demo data ($152 spent of a $350 weekly budget); run it again any time to start over.
+
+2. **Run the app.** Open `ios/Balance.xcodeproj` in Xcode, pick any iPhone Simulator at the top, and press **Run** (⌘R).
+
+3. **Try Flow 1.** Tap the weekly spending card, enter `0` to see the error, enter `400`, tap **Review changes**, then **Save budget**. Home shows the saved notice and $152 of $400.
+
+4. **Run the tests.** Press **⌘U** in Xcode. The tests don't need the backend.
+
+The app calls the backend at `http://127.0.0.1:8000`, which only works in the Simulator on the same Mac.
+
+## Where things are
+
+| Folder | What's in it |
+| --- | --- |
+| `Balance/App/` | `BalanceApp.swift`, where the app starts. |
+| `Balance/Core/` | `Budget.swift` (the data the backend sends), `BudgetAPI.swift` (the calls to the backend), and `Theme.swift` (colors). |
+| `Balance/Features/Home/` | Flow 1: Home, editing, review, and the saved notice. See [Features](Balance/Features/README.md). |
+| `BalanceTests/` | Unit tests. |
+| `BalanceUITests/` | Reserved for interface tests in a later milestone. |
+
+New Swift files added inside these folders are picked up by Xcode automatically.
+
+## Checks
+
+For the Flow 1 prototype, each iOS pull request builds in Xcode, passes the unit tests (⌘U), and describes a manual walkthrough in the Simulator. See the [development process](../doc/DEVELOPMENT_PROCESS.md#application-gates-to-add-with-implementation).
