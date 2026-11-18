@@ -1,3 +1,3 @@
-# Application setup
+# App
 
-Reserved for the iOS entry point, dependency setup, and app-wide configuration. Add these files with the real Xcode project. Keep feature behavior in `Features/` and shared support in `Core/`.
+`BalanceApp.swift` is where the app starts and which screen it shows first. Screens go in `Features/`, shared code in `Core/`.
