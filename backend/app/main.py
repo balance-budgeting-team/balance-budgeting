@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import budgets
+from app.api import budgets, transactions
 from app.api.errors import validation_error_handler
 from app.core.config import settings
 
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 app.add_exception_handler(RequestValidationError, validation_error_handler)
 app.include_router(budgets.router)
+app.include_router(transactions.router)
 
 
 @app.get("/health", tags=["health"])
